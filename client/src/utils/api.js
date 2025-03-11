@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:8888/api";  // Ensure this matches your backend setup
+const API_BASE_URL = "https://task-management-app-a2r6.onrender.com/api";  // Ensure this matches your backend setup
 
 export const getAllTasks = () => axios.get(`${API_BASE_URL}/getAllTasks`);
 export const createTask = (taskData) => axios.post(`${API_BASE_URL}/post`, taskData);
