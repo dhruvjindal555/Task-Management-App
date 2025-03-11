@@ -4,7 +4,7 @@ A modern task manager application built with React, Express, and MongoDB. This p
 
 ## Deployed Application
 
-[Check out the live demo here]([https://your-deployed-app-link.com](https://task-management-app-sigma-lemon.vercel.app/))  <!-- Replace with your actual deployed link -->
+[Check out the live demo here](https://task-management-app-sigma-lemon.vercel.app/)  
 
 ## Features
 
