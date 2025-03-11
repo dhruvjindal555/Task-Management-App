@@ -1,14 +1,10 @@
-import { catchAsyncErrors } from "../middlewares/catchAsyncErrors.js";
-import ErrorHandler from "../middlewares/error.js";
-import { Task } from "../models/taskSchema.js";
+const  Task  = require("../models/taskSchema.js");
 
-export const createTask = catchAsyncErrors(async (req, res, next) => {
+const createTask = (async (req, res, next) => {
   const { title, description } = req.body;
-  const createdBy = req.user._id;
   const task = await Task.create({
     title,
-    description,
-    createdBy,
+    description
   });
   res.status(200).json({
     success: true,
@@ -16,11 +12,17 @@ export const createTask = catchAsyncErrors(async (req, res, next) => {
     message: "Task Created",
   });
 });
-export const deleteTask = catchAsyncErrors(async (req, res, next) => {
+
+
+
+const deleteTask = (async (req, res, next) => {
   const { id } = req.params;
   const task = await Task.findById(id);
   if (!task) {
-    return next(new ErrorHandler("Task not found!", 400));
+    return res.status(400).json({
+      success: false,
+      message: "Task not found!",
+    });
   }
   await task.deleteOne();
   res.status(200).json({
@@ -28,11 +30,18 @@ export const deleteTask = catchAsyncErrors(async (req, res, next) => {
     message: "Task Deleted!",
   });
 });
-export const updateTask = catchAsyncErrors(async (req, res, next) => {
+
+
+
+
+const updateTask = (async (req, res, next) => {
   const { id } = req.params;
   let task = await Task.findById(id);
   if (!task) {
-    return next(new ErrorHandler("Task not found!", 400));
+    return res.status(400).json({
+      success: false,
+      message: "Task not found!",
+    });
   }
   task = await Task.findByIdAndUpdate(id, req.body, {
     new: true,
@@ -45,22 +54,24 @@ export const updateTask = catchAsyncErrors(async (req, res, next) => {
     task,
   });
 });
-export const getMyTask = catchAsyncErrors(async (req, res, next) => {
-  const user = req.user._id;
-  const tasks = await Task.find({ createdBy: user });
+
+
+
+
+const getAllTasks = (async (req, res, next) => {
+  const tasks = await Task.find();
   res.status(200).json({
     success: true,
     tasks,
   });
 });
-export const getSingleTask = catchAsyncErrors(async (req, res, next) => {
-  const { id } = req.params;
-  let task = await Task.findById(id);
-  if (!task) {
-    return next(new ErrorHandler("Task not found!", 400));
-  }
-  res.status(200).json({
-    success: true,
-    task,
-  });
-});
+
+
+module.exports = {
+  createTask,
+  deleteTask,
+  updateTask,
+  getAllTasks
+}
+
+

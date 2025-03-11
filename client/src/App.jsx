@@ -1,83 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./components/Home";
-import Navbar from "./components/Navbar";
-import Register from "./components/Register";
-import { Toaster } from "react-hot-toast";
-import axios from "axios";
-import Login from "./components/Login";
-import Profile from "./components/Profile";
+import TaskList from "./components/TaskList";
+import TaskForm from "./components/TaskForm";
+
 const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [tasks, setTasks] = useState([]);
-  const [user, setUser] = useState({});
-  const [taskTitle, setTaskTitle] = useState("Tasks");
-
-  useEffect(() => {
-    const handleGetUser = async () => {
-      try {
-        const { data } = await axios.get(
-          "http://localhost:4000/api/v1/user/me",
-          { withCredentials: true }
-        );
-        setIsAuthenticated(true);
-        setUser(data.user);
-      } catch (error) {
-        console.log("USER IS NOT AUTHENTICATED!");
-        setIsAuthenticated(false);
-        setUser({});
-      }
-    };
-    handleGetUser();
-  }, [isAuthenticated]);
-
   return (
-    <>
-      <Router>
-        <Navbar
-          setTasks={setTasks}
-          setIsAuthenticated={setIsAuthenticated}
-          isAuthenticated={isAuthenticated}
-          setTaskTitle={setTaskTitle}
-        />
+    <Router>
+      <div className="min-h-screen bg-gradient-to-br from-blue-900 to-indigo-900 p-6 text-white">
         <Routes>
-          <Route
-            path="/"
-            element={
-              <Home
-                isAuthenticated={isAuthenticated}
-                tasks={tasks}
-                setTasks={setTasks}
-                taskTitle={taskTitle}
-              />
-            }
-          />
-          <Route
-            path="/register"
-            element={
-              <Register
-                isAuthenticated={isAuthenticated}
-                setIsAuthenticated={setIsAuthenticated}
-              />
-            }
-          />
-          <Route
-            path="/login"
-            element={
-              <Login
-                isAuthenticated={isAuthenticated}
-                setIsAuthenticated={setIsAuthenticated}
-              />
-            }
-          />
-          <Route
-            path="/profile"
-            element={<Profile user={user} isAuthenticated={isAuthenticated} />}
-          />
+          <Route path="/" element={<TaskList />} />
+          <Route path="/task/new" element={<TaskForm />} />
+          <Route path="/task/edit/:id" element={<TaskForm />} />
         </Routes>
-        <Toaster />
-      </Router>
-    </>
+      </div>
+    </Router>
   );
 };
 
